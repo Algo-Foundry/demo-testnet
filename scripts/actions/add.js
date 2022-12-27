@@ -4,18 +4,16 @@ const { types } = require("@algo-builder/web");
 async function run(runtimeEnv, deployer) {
     const master = deployer.accountsByName.get("master");
     const acc1 = deployer.accountsByName.get("acc1");
-    const approvalFile = "sc_approval.py";
-    const clearStateFile = "sc_clearstate.py";
 
     // get app info
-    const app = deployer.getApp(approvalFile, clearStateFile);
+    const app = deployer.getApp("TestNet Demo");
     const appID = app.appID;
     let globalState = await readAppGlobalState(deployer, master.addr, appID);
 
     // call app to "Add"
     const appArgs = ["Add"].map(convert.stringToBytes);
 
-    await executeTransaction(deployer, {
+    await deployer.executeTx({
         type: types.TransactionType.CallApp,
         sign: types.SignType.SecretKey,
         fromAccount: acc1,

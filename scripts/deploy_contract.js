@@ -1,4 +1,5 @@
 const { readAppGlobalState } = require("@algo-builder/algob");
+const { types } = require("@algo-builder/web");
 
 async function run(runtimeEnv, deployer) {
     const master = deployer.accountsByName.get("master");
@@ -6,10 +7,12 @@ async function run(runtimeEnv, deployer) {
     const clearStateFile = "sc_clearstate.py";
 
     await deployer.deployApp(
-        approvalFile,
-        clearStateFile,
+        master,
         {
-            sender: master,
+            appName: "TestNet Demo",
+            metaType: types.MetaType.FILE,
+            approvalProgramFilename: approvalFile,
+            clearProgramFilename: clearStateFile,
             localInts: 0,
             localBytes: 0,
             globalInts: 1,
@@ -20,7 +23,7 @@ async function run(runtimeEnv, deployer) {
     );
 
     // get app info
-    const app = deployer.getApp(approvalFile, clearStateFile);
+    const app = deployer.getApp("TestNet Demo");
     console.log(app);
     const appAddress = app.applicationAccount;
 
